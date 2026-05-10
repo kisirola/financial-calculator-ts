@@ -23,10 +23,6 @@ export class NumericField {
         return this.root;
     }
 
-    getValue(): number {
-        return Number.parseFloat(this.field.value);
-    }
-
     get value():number {
         return Number.parseFloat(this.field.value);
     }
