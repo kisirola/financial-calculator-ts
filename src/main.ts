@@ -1,5 +1,5 @@
 import './style.css';
-import { IrrCalculator } from './calculator-ui';
+import { IrrCalculator } from './calculator-irr';
 
 class App {
 
