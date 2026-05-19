@@ -115,6 +115,22 @@ p {
   }
 }
 
+.home-button {
+    background-image: url('public/home-button.svg');
+    width: 24px;
+    height: 24px;
+    border: none;
+}
+
+.dashboard h2 {
+  color: red
+}
+
+.dashboard button {
+  background-color: var(--accent);
+
+}
+
 .calculator {
 
   width: 90%;
