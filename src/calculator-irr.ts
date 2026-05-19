@@ -1,7 +1,7 @@
 import type { TimedCashFlow } from './calculator-type.ts'
 import {Calculate} from "./calculate.ts";
 
-export class NumericField {
+export class NumericInputField {
 
     private readonly root: HTMLDivElement;
     private readonly field: HTMLInputElement;
@@ -28,13 +28,13 @@ export class NumericField {
     }
 }
 
-class TimeField extends NumericField {
+class TimeField extends NumericInputField {
     constructor(value: number) {
         super(value, 'time');
     }
 }
 
-class AmountField extends NumericField {
+class AmountField extends NumericInputField {
     constructor(value: number) {
         super(value, 'amount');
     }
