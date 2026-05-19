@@ -1,11 +1,15 @@
 import './style.css';
+import type {MainRouter} from "./main-router.ts";
 import { IrrCalculator } from './calculator-irr';
+import { Dashboard } from './dashboard';
 
-class App {
+class App implements MainRouter {
 
     private readonly appDiv: HTMLDivElement;
     private readonly header: HTMLDivElement;
-    private ui: IrrCalculator;
+    private readonly homeButton: HTMLButtonElement
+    private irrCalculator: IrrCalculator;
+    private dashboard: Dashboard;
 
     constructor() {
         const el = document.querySelector<HTMLDivElement>('#app');
@@ -15,12 +19,30 @@ class App {
 
 
         this.header = document.createElement('div');
-        this.header.innerHTML = `Header`;
+        this.homeButton = document.createElement('button');
+        this.homeButton.classList.add('home-button');
+        this.homeButton.onclick = () => {
+            this.viewDashboard();
+        }
+
         this.header.id = 'header';
+        this.header.appendChild(this.homeButton);
         this.appDiv.appendChild(this.header);
 
-        this.ui = new IrrCalculator();
-        this.appDiv.appendChild(this.ui.div);
+        this.irrCalculator = new IrrCalculator();
+
+        this.dashboard = new Dashboard(this);
+
+        // start on dashboard
+        this.appDiv.appendChild(this.dashboard);
+    }
+
+    viewDashboard() {
+        this.appDiv.replaceChild(this.dashboard, this.irrCalculator.div);
+    }
+
+    viewIrrCalculator() {
+        this.appDiv.replaceChild(this.irrCalculator.div, this.dashboard);
     }
 }
 
