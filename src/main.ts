@@ -5,44 +5,60 @@ import { Dashboard } from './dashboard';
 
 class App implements MainRouter {
 
-    private readonly appDiv: HTMLDivElement;
+    private readonly root: HTMLDivElement;
     private readonly header: HTMLDivElement;
     private readonly homeButton: HTMLButtonElement
+    private readonly darkModeButton: HTMLButtonElement
+    private readonly center: HTMLDivElement;
     private irrCalculator: IrrCalculator;
-    private dashboard: Dashboard;
+    private readonly dashboard: Dashboard;
 
     constructor() {
         const el = document.querySelector<HTMLDivElement>('#app');
         if (!el) throw new Error('#app element not found');
 
-        this.appDiv = el;
-
-
+        this.root = el;
         this.header = document.createElement('div');
+        this.header.id = 'header';
+
         this.homeButton = document.createElement('button');
         this.homeButton.classList.add('home-button');
         this.homeButton.onclick = () => {
             this.viewDashboard();
         }
 
-        this.header.id = 'header';
+        this.darkModeButton = document.createElement('button');
+        this.darkModeButton.classList.add('dark-mode-button');
+        this.darkModeButton.onclick = () => {
+            console.log('dark mode');
+        }
+
+
+
         this.header.appendChild(this.homeButton);
-        this.appDiv.appendChild(this.header);
+        this.header.appendChild(this.darkModeButton);
+        this.root.appendChild(this.header);
+
+        this.center = document.createElement('div');
+        this.center.id = 'center';
+        this.root.appendChild(this.center);
 
         this.irrCalculator = new IrrCalculator();
-
         this.dashboard = new Dashboard(this);
 
         // start on dashboard
-        this.appDiv.appendChild(this.dashboard);
+
+        this.center.appendChild(this.dashboard);
     }
 
     viewDashboard() {
-        this.appDiv.replaceChild(this.dashboard, this.irrCalculator.div);
+        this.center.innerHTML = '';
+        this.center.appendChild(this.dashboard);
     }
 
     viewIrrCalculator() {
-        this.appDiv.replaceChild(this.irrCalculator.div, this.dashboard);
+        this.center.innerHTML = '';
+        this.center.appendChild(this.irrCalculator.div);
     }
 }
 
