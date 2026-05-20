@@ -125,11 +125,56 @@ class CashFlowElements {
     get count(): number {
         return this.list.length;
     }
+}
+
+interface InputController {
 
 }
 
+class AddRemoveButtons extends HTMLElement implements InputController {
+
+    onAddButtonClicked?: () => void;
+    onRemoveButtonClicked?: () => void;
+
+    constructor() {
+        super();
+    }
+
+    private render() {
+        console.log('render');
+        this.classList.add('input-buttons');
+        this.innerHTML = '<button class="add circle">+</button><button class="remove circle">-</button>';
+
+        let addButton = this.querySelector('.add') as HTMLButtonElement;
+        let removeButton = this.querySelector('.remove') as HTMLButtonElement;
+
+        addButton.onclick = () => {
+            if (this.onAddButtonClicked)
+                this.onAddButtonClicked();
+
+        }
+        removeButton.onclick = () => {
+            if (this.onRemoveButtonClicked)
+                this.onRemoveButtonClicked();
+        }
+
+    }
+
+    connectedCallback() {
+        console.log('connected');
+        this.render();
+    }
+
+    disconnectedCallback() {
+        console.log('disconnected');
+    }
+}
+
+customElements.define("add-remove-buttons", AddRemoveButtons);
+
 export class IrrCalculator {
 
+    private readonly addRemoveButtons: AddRemoveButtons;
     private readonly root: HTMLDivElement;
     private readonly header: HTMLDivElement;
     private readonly footer: HTMLDivElement;
@@ -151,13 +196,20 @@ export class IrrCalculator {
         this.header.innerHTML = '<div class="title">IRR Calculator</div>';
 
         this.buttons = document.createElement('div');
-        this.header.classList.add('buttons');
+        this.buttons.classList.add('buttons');
+
+
+
         this.header.appendChild(this.buttons);
 
-        this.root.appendChild(this.header);
-
         this.cashFlowElements = new CashFlowElements();
-        this.root.appendChild(this.cashFlowElements.rootElement);
+        this.addRemoveButtons = document.createElement("add-remove-buttons");
+        this.addRemoveButtons.onAddButtonClicked = () => {
+            this.cashFlowElements.appendEmptyElement();
+        }
+        this.addRemoveButtons.onRemoveButtonClicked = () => {
+            this.cashFlowElements.removeLastElement();
+        }
 
         this.addButton = document.createElement('button');
         this.addButton.classList.add('add');
@@ -166,8 +218,6 @@ export class IrrCalculator {
         this.addButton.onclick = () => {
             this.cashFlowElements.appendEmptyElement();
         }
-
-        this.buttons.appendChild(this.addButton);
 
         this.removeButton = document.createElement('button');
         this.removeButton.classList.add('remove');
@@ -178,6 +228,8 @@ export class IrrCalculator {
             this.cashFlowElements.removeLastElement();
         }
 
+        this.buttons.appendChild(this.addRemoveButtons);
+        this.buttons.appendChild(this.addButton);
         this.buttons.appendChild(this.removeButton);
 
 
@@ -199,6 +251,9 @@ export class IrrCalculator {
         this.resultView.innerHTML = 'IRR: Click Calculate to see result!';
         this.footer.appendChild(this.resultView);
 
+
+        this.root.appendChild(this.header);
+        this.root.appendChild(this.cashFlowElements.rootElement);
         this.root.appendChild(this.footer);
 
         /*
@@ -241,5 +296,5 @@ export class IrrCalculator {
             }
         }
     }
-
 }
+
