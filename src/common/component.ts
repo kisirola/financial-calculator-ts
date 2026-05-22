@@ -1,4 +1,4 @@
-export class AddRemoveButtons extends HTMLElement {
+export  class AddRemoveButtons extends HTMLElement {
 
     onAddButtonClicked?: () => void;
     onRemoveButtonClicked?: () => void;
@@ -18,22 +18,20 @@ export class AddRemoveButtons extends HTMLElement {
         addButton.onclick = () => {
             if (this.onAddButtonClicked)
                 this.onAddButtonClicked();
-
         }
         removeButton.onclick = () => {
             if (this.onRemoveButtonClicked)
                 this.onRemoveButtonClicked();
         }
-
     }
 
     connectedCallback() {
-        console.log('connected');
+        console.log('AddRemoveButtons: connected');
         this.render();
     }
 
     disconnectedCallback() {
-        console.log('disconnected');
+        console.log('AddRemoveButtons: disconnected');
     }
 }
 
